@@ -12,7 +12,9 @@
 
 XML_ROOT="$(pwd)/xml"
 MKGRAPH="$(pwd)/mkgraph.sh"
-PACKAGES=$(opam list -a --repos coq-released --short -S | grep -v coqide)
+ALLPACKAGESNO=$(opam list -a --repos coq-released --short | wc -l)
+PACKAGES=$(opam list -a --installable --repos coq-released --short -S | grep -v coqide)
+echo "Installable packages (out of $ALLPACKAGESNO total Coq packages) to be exported: $PACKAGES"
 mkdir -p "$XML_ROOT"
 for i in $PACKAGES
 do
