@@ -11,6 +11,7 @@
 #  - how to do that safely in the script?
 
 XML_ROOT="$(pwd)/xml"
+MKGRAPH="$(pwd)/mkgraph.sh"
 PACKAGES=$(opam list -a --repos coq-released --short -S | grep -v coqide)
 for i in $PACKAGES
 do
@@ -19,4 +20,5 @@ do
         echo "Exporting $i to $COQ_XML_LIBRARY_ROOT"
         opam uninstall "$i" --yes > /dev/null
         opam install "$i" > "$COQ_XML_LIBRARY_ROOT/opam.log" 2>&1 || touch "$COQ_XML_LIBRARY_ROOT/ABORTED"
+        (cd "$COQ_XML_LIBRARY_ROOT" && $MKGRAPH)
 done
