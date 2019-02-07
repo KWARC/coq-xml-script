@@ -13,6 +13,7 @@
 XML_ROOT="$(pwd)/xml"
 MKGRAPH="$(pwd)/mkgraph.sh"
 PACKAGES=$(opam list -a --repos coq-released --short -S | grep -v coqide)
+mkdir -p "$XML_ROOT"
 for i in $PACKAGES
 do
         export COQ_XML_LIBRARY_ROOT="$XML_ROOT/$i"
