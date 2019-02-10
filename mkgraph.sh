@@ -44,3 +44,6 @@ done
 # remove duplicates
 
 sort -u $OUTPUT > $OUTPUT.tmp && mv $OUTPUT.tmp $OUTPUT
+
+# add dependcy arcs between files
+cat $OUTPUT | grep oo | sed "s/^oo/ii/g" | sed "s/\/[^|\/]*|/|/g" | sed "s/\/[^\/]*$//g" | sort -u >> $OUTPUT
