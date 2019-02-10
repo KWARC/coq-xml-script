@@ -48,3 +48,7 @@ sort -u $OUTPUT > $OUTPUT.tmp && mv $OUTPUT.tmp $OUTPUT
 # add dependcy arcs between files
 cat $OUTPUT | grep "^oo|" | sed "s/^oo/ii/g" | sed "s/\/[^|\/]*|/|/g" | sed "s/\/[^\/]*$//g" | sort -u > $OUTPUT.tmp
 cat $OUTPUT.tmp >> $OUTPUT && rm $OUTPUT.tmp
+
+# too inefficint (to compute size of dirs)
+#cat stdlib_graph.csv | grep "^o|" > /tmp/foo1
+#for i in `cat stdlib_graph.csv | grep "^d|" | cut -d "|" -f 2`; do echo -n "s|$i|"; grep $i /tmp/foo1 | wc -l; done > goo
