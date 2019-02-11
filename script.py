@@ -94,5 +94,11 @@ def force_upload_folder(gl, folder, namespace, name, message='Initial commit'):
     
 
 if __name__ == "__main__":
-    gl = Gitlab('https://gl.kwarc.info', private_token=input('Enter your private token'))
-    force_upload_folder(gl, 'example/test', 'twiesing', 'test3')
+    import sys
+    token = sys.argv[1]
+    folder = sys.argv[2]
+    repo = sys.argv[3]
+    name = sys.argv[4]
+
+    gl = Gitlab('https://gl.kwarc.info', private_token=token)
+    force_upload_folder(gl, folder, repo, name)
