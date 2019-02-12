@@ -5,13 +5,18 @@ from distutils.spawn import find_executable
 def get_user(gl, username):
     try:
         return gl.users.list(username=username)[0]
-    except:
+    except Exception as e:
+        print("Failed get_user()")
+        print(e)
         return None
 
 def get_namespace(gl, namespace):
     try:
-        return gl.groups.search(namespace)[0]
-    except:
+        groups = gl.groups.get(namespace)
+        return groups
+    except Exception as e:
+        print("Failed get_namespace()")
+        print(e)
         return None
 
 def create(gl, namespace, name):
@@ -23,11 +28,13 @@ def create(gl, namespace, name):
             pass
         return get_repo(gl, namespace, name)
     
-    namespace = get_namespace(gl, namespace)
-    if namespace:
+    ns = get_namespace(gl, namespace)
+    if ns:
         try:
-            gl.projects.create({name: name, namespace_id: namespace.id})
-        except:
+            gl.projects.create({'name': name, 'namespace_id': ns.id})
+        except Exception as e:
+            print("Failed create_repo()")
+            print(e)
             pass
         return get_repo(gl, namespace, name)
     
@@ -38,15 +45,16 @@ def get_repo(gl, namespace, name):
     repo = "{}/{}".format(namespace, name)
     try:
         return gl.projects.get(repo)
-    except:
+    except Exception as e:
+        print("Failed get_repo()")
+        print(e)
         return None
 
 def get_or_create(gl, namespace, name):
     repo = get_repo(gl, namespace, name)
     if repo:
         return repo
-    
-    print('in create')
+
     return create(gl, namespace, name)
 
 
@@ -64,7 +72,9 @@ def prepare_repository(gl, namespace, name):
     # get the default branch
     try:
         dflt = repo.branches.get(repo.default_branch)
-    except:
+    except Exception as e:
+        print("Failed get_default_branch()")
+        print(e)
         return None
     
     # and unprotect it
@@ -83,6 +93,7 @@ def run(pwd, cmd, *args):
 def force_upload_folder(gl, folder, namespace, name, message='Initial commit'):
     repo = prepare_repository(gl, namespace, name)
     if repo is None:
+        print("failed prepare()")
         return False
     
     run(folder, 'rm', '-rf', '.git')
@@ -94,5 +105,13 @@ def force_upload_folder(gl, folder, namespace, name, message='Initial commit'):
     
 
 if __name__ == "__main__":
-    gl = Gitlab('https://gl.kwarc.info', private_token=input('Enter your private token'))
-    force_upload_folder(gl, 'example/test', 'twiesing', 'test3')
+    import sys
+    token = sys.argv[1]
+    folder = sys.argv[2]
+    repo = sys.argv[3]
+    name = folder
+
+    print("Uploading {} to {}/{}".format(folder, repo, name))
+
+    gl = Gitlab('https://gl.mathhub.info', private_token=token)
+    force_upload_folder(gl, folder, repo, name)
