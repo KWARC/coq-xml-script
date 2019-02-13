@@ -48,5 +48,5 @@ sort -u $OUTPUT > $OUTPUT.tmp && mv $OUTPUT.tmp $OUTPUT
 # add dependcy arcs between files
 cat $OUTPUT | grep "^oo|" | sed "s/^oo/ii/g" | sed "s/\/[^|\/]*|/|/g" | sed "s/\/[^\/]*$//g" | sort -u > $OUTPUT.tmp && mv $OUTPUT.tmp $OUTPUT
 
-# too inefficint (to compute size of dirs)
+# add size of dirs
 for i in `cat $OUTPUT | grep "^o|" | cut -d "|" -f 2`; do dirname $i >> s.tmp; done && cat s.tmp | sort | uniq -c | sed "s/ *\([0-9]*\) \(.*\)/s|\2|\1/g" >> $OUTPUT && rm s.tmp
