@@ -11,6 +11,6 @@ mkdir done
 
 for name in $(find -maxdepth 1 -name 'coq-*' | cut -c 3-); do
   echo "Uploading $name";
-  python script.py $token $name $group;  
+  gitlab-force-upload -dest "$group/$name" -token "$token" -folder "$name" -url "https://gl.mathhub.info" -v;  
   mv $name/ done/;
 done
