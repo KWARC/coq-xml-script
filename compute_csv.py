@@ -9,7 +9,7 @@ db = {}
 outfile = None
 
 def log(*args):
-    print(" ", *args)
+    # print(" ", *args)
     outfile.write("|".join((*args,)))
     outfile.write("\n")
 
@@ -91,7 +91,7 @@ def f_file(path, filename_real):
 #
 def try_match_aux(path, pre):
     path = path.strip("/").lower().split("/")
-    print("try_match_aux", path, pre)
+    # print("try_match_aux", path, pre)
     j = 0
     i = 0
     while i < len(pre) and j < len(path):
@@ -122,13 +122,14 @@ def find_in_db(url):
     try:
         list = db[name]
     except KeyError:
-        print("[ERR]", "Doc", pre, name, "not in db")
+        # print("[ERR]", "Doc", pre, name, "not in db")
         return
     uri = try_match(list, pre)
     if uri:
         log("Doc", uri, url)
     else:
-        print("[ERR]", "Doc", pre, name, "not found")
+        # print("[ERR]", "Doc", pre, name, "not found")
+        pass
 
 def doc(path, prefix):
     with open(path) as f:
@@ -139,7 +140,7 @@ def doc(path, prefix):
             i = line.find('<a href="' + prefix)
             if i != -1:
                 href = line[i:].split('"')[1]
-                print("Looking", href)
+                # print("Looking", href)
                 find_in_db(href)
 
 if __name__ == "__main__":
@@ -148,8 +149,8 @@ if __name__ == "__main__":
     parser.add_argument("--doc", type=str, help="Path to index.html")
     args = parser.parse_args()
     with open(args.out, "w") as outfile:
-        print(">>> Walking directories")
+        # print(">>> Walking directories")
         walk(f_file, f_dir, ".")
         if args.doc:
-            print(">>> Processing index.html")
+            # print(">>> Processing index.html")
             doc(args.doc, "")
